@@ -1,0 +1,8 @@
+sensor:
+  - platform: plex
+
+media_player:
+  - platform: plex
+    entity_namespace: plex
+    remove_unavailable_clients: true
+    client_remove_interval: 600

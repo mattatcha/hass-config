@@ -1,0 +1,24 @@
+media_player.home_theater:
+  friendly_name: Denon
+media_player.unnamed_device:
+  friendly_name: Bedroom TV
+light.bedroom:
+  friendly_name: Adam Bedroom
+  hidden: true
+sensor.hallway_thermostat_humidity:
+  friendly_name: Indoor Humidity
+  homebridge_name: Indoor Humidity
+binary_sensor.hallway_thermostat_online:
+  hidden: true
+sensor.hallway_thermostat_hvac_state:
+  friendly_name: HVAC State
+media_player.plex_theater:
+  friendly_name: Theater Apple TV
+sensor.yr_symbol:
+  hidden: true
+sensor.sonarr_upcoming:
+  hidden: true
+weather.shop:
+  hidden: true
+cover.garage_door_dad:
+  hidden: true

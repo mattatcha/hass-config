@@ -1,0 +1,22 @@
+aarlo:
+  username: !secret arlo_username
+  password: !secret arlo_password
+
+alarm_control_panel:
+  - platform: aarlo
+    home_mode_name: home
+
+binary_sensor:
+  - platform: aarlo
+    monitored_conditions:
+      - motion
+      - sound
+
+sensor:
+  - platform: aarlo
+    monitored_conditions:
+      - battery_level
+      - signal_strength
+
+camera:
+  - platform: aarlo

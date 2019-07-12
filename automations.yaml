@@ -1,0 +1,49 @@
+- id: "1517196027443"
+  alias: Arm Night
+  trigger:
+    - entity_id: group.all_lights
+      platform: state
+      to: "off"
+    - entity_id: media_player.unnamed_device
+      platform: state
+      to: "off"
+    - at: "23:30"
+      platform: time
+  condition:
+    - after: "22:30"
+      condition: time
+    - condition: state
+      entity_id: media_player.home_theater
+      state: "off"
+  action:
+    - service: alarm_control_panel.alarm_arm_home
+- action:
+    - data: {}
+      service: alarm_control_panel.alarm_arm_home
+  alias: Disarm Morning
+  condition: []
+  id: "1517378216738"
+  trigger:
+    - above: "8"
+      entity_id: sun.sun
+      platform: numeric_state
+      value_template: "{{ state.attributes.elevation }}"
+- alias: "Power state on HA start-up"
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/septic_pump/state"
+        payload: ""
+- alias: "Start HomeKit"
+  trigger:
+    - platform: event
+      event_type: zwave.network_ready
+    - platform: event
+      event_type: zwave.network_complete
+    - platform: event
+      event_type: zwave.network_complete_some_dead
+  action:
+    - service: homekit.start

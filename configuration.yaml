@@ -1,0 +1,137 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: 157
+  unit_system: imperial
+  time_zone: America/Chicago
+  customize: !include customize.yaml
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.2.0/24
+  packages: !include_dir_named packages
+
+http:
+  base_url: https://hass.lanciv.com
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - 192.168.2.25
+  ip_ban_enabled: true
+  login_attempts_threshold: 10
+
+logger:
+  default: info
+
+panel_custom:
+  - name: zwavegraph2
+    sidebar_title: ZWave Graph2
+    sidebar_icon: mdi:access-point-network
+    url_path: zwave
+
+homekit:
+  auto_start: false
+  filter:
+    include_entities:
+      - cover.bmw
+      - light.master_bedroom_fan_light
+      - light.master_bathroom
+      - light.kitchen
+      - switch.shop_ceiling_lights
+      - switch.shop_driveway_exterior_lights
+      - light.backyard
+      - light.living_room
+      - light.living_room_dimmer
+      - light.living_room_fireplace_dimmer
+      - light.living_room_lamp
+      - light.laundry_room
+      - light.dining_room
+      - light.media_room
+      - switch.pool_light
+
+history:
+logbook:
+map:
+sun:
+conversation:
+frontend:
+system_health:
+config:
+person:
+ios:
+mobile_app:
+stream:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+light: !include light_group.yaml
+
+recorder:
+  purge_keep_days: 10
+  exclude:
+    domains:
+      - automation
+      - group
+      - zwave
+      - script
+    entities:
+      - sun.sun
+      - sensor.septic_pump_energy_voltage
+
+updater:
+  include_used_components: true
+
+discovery:
+  ignore:
+    - apple_tv
+    - plex_mediaserver
+    - google_cast
+    - homekit
+
+sensor:
+  - platform: yr
+  - platform: sonarr
+    api_key: !secret sonarr_api_key
+    host: localhost
+    monitored_conditions:
+      - upcoming
+    days: 2
+
+device_tracker:
+  - platform: unifi
+    verify_ssl: false
+    username: !secret unifi_username
+    password: !secret unifi_password
+    interval_seconds: 10
+    consider_home: 180
+    new_device_defaults:
+      track_new_devices: no
+
+media_player:
+  - platform: denonavr
+    zones:
+      - zone: Zone2
+        name: Backyard
+
+cover:
+  - platform: myq
+    username: !secret myq_username
+    password: !secret myq_password
+    type: chamberlain
+
+ecobee:
+  api_key: !secret ecobee_api_key
+
+# smarthub:
+#   username: !secret smarthub_username
+#   password: !secret smarthub_password
+
+# enable Haiku with SenseMe ceiling fans
+senseme:
+  max_number_fans: 1
+
+influxdb:
+# zwave:
+#   usb_path: /dev/zstick

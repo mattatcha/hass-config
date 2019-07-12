@@ -1,0 +1,21 @@
+ecovacs:
+  username: !secret ecovacs_username
+  password: !secret ecovacs_password
+  country: us
+  continent: na
+
+sensor:
+  - platform: template
+    sensors:
+      vacuum_filter:
+        friendly_name: "Vacuum Filter Remaining Lifespan"
+        unit_of_measurement: "%"
+        value_template: "{{ state_attr('vacuum.bitch', 'component_filter') }}"
+      vacuum_main_brush:
+        friendly_name: "Vacuum Main Brush Remaining Lifespan"
+        unit_of_measurement: "%"
+        value_template: "{{ state_attr('vacuum.bitch', 'component_main_brush') }}"
+      vacuum_side_brush:
+        friendly_name: "Vacuum Side Brush Remaining Lifespan"
+        unit_of_measurement: "%"
+        value_template: "{{ state_attr('vacuum.bitch', 'component_main_brush') }}"
