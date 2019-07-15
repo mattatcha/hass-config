@@ -18,4 +18,4 @@ sensor:
       vacuum_side_brush:
         friendly_name: "Vacuum Side Brush Remaining Lifespan"
         unit_of_measurement: "%"
-        value_template: "{{ state_attr('vacuum.bitch', 'component_main_brush') }}"
+        value_template: "{{ state_attr('vacuum.bitch', 'component_side_brush') }}"
