@@ -24,6 +24,8 @@ http:
 
 logger:
   default: info
+  logs:
+    senseme.senseme: warn
 
 panel_custom:
   - name: zwavegraph2
