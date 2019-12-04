@@ -1,0 +1,49 @@
+input_number:
+  pool_freeze_protection_temp:
+    name: Pool Freeze Protection Temp
+    min: 32
+    max: 40
+    step: 1
+    mode: box
+    unit_of_measurement: "°F"
+    icon: mdi:snowflake-alert
+  pool_freeze_protection_temp_differential:
+    name: Pool Freeze Protection Temp Differential
+    min: 1
+    max: 5
+    step: 1
+    mode: box
+    unit_of_measurement: "°F"
+input_boolean:
+  pool_winter_schedule:
+    name: Pool Winter Schedule
+
+automation:
+  - alias: Pool Pump On
+    trigger:
+      - at: "06:30:00"
+        platform: time
+      - at: "18:30:00"
+        platform: time
+      - platform: template
+        value_template: >-
+          {{ states('sensor.my_weather_station_temp') <= states('input_number.pool_freeze_protection_temp') }}
+        for:
+          minutes: 1
+    action:
+      - service: switch.turn_on
+        entity_id: switch.pool_pump_power
+
+  - alias: Pool Pump Off
+    trigger:
+      - at: "11:30:00"
+        platform: time
+      - at: "22:30:00"
+        platform: time
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states('sensor.my_weather_station_temp') >= states('input_number.pool_freeze_protection_temp') }}
+    action:
+      - service: switch.turn_off
+        entity_id: switch.pool_pump_power
