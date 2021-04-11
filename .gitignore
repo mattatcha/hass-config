@@ -13,6 +13,7 @@
 !packages
 
 # Ignore folders.
+custom_components
 venv
 tts
 .storage
