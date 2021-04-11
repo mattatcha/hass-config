@@ -1,0 +1,8 @@
+scene:
+  - name: Living Room Night
+    entities:
+      light.living_room_lamp:
+        state: "on"
+        brightness: 255
+      light.living_room_ceiling:
+        state: "off"
