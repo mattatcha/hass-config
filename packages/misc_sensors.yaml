@@ -1,0 +1,21 @@
+sensor:
+  - platform: rest
+    resource: https://hydromet.lcra.org/api/GetHighlandLakesSummary
+    name: Lake Travis Water Level
+    scan_interval: 300
+    verify_ssl: false
+    unit_of_measurement: MSL
+    force_update: true
+    headers:
+      Content-Type: application/json
+    value_template: >-
+      {% set lake = value_json | selectattr('siteNumber','eq', 3963) | first %}
+
+      {{lake.headElevation}}
+
+  - platform: template
+    sensors:
+      lake_level_compared_full:
+        unit_of_measurement: feet
+        value_template: >-
+          {{(float(states('sensor.lake_travis_water_level')) - 681) | round(2) }}
