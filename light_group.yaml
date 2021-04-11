@@ -3,10 +3,15 @@
 #################################################################
 
 - platform: group
-  name: Living Room
+  name: Living Room Ceiling
   entities:
     - light.living_room_dimmer
     - light.living_room_fireplace_dimmer
+
+- platform: group
+  name: Living Room
+  entities:
+    - light.living_room_ceiling
     - light.living_room_lamp
 
 - platform: group
@@ -30,17 +35,32 @@
   entities:
     - light.living_room_exterior
 
-# - platform: group
-#   name: Front Yard
-#   entities:
-#     - switch.shop_driveway_exterior_lights
+- platform: group
+  name: Shop Front Exterior
+  entities:
+    - light.shop_front_1
+    - light.shop_front_2
+
+- platform: group
+  name: House Front Exterior
+  entities:
+    - light.front_door_1
+    - light.front_door_2
+
+- platform: group
+  name: Front Yard
+  entities:
+    - light.shop_front_exterior
+    - light.house_front_exterior
 
 - platform: group
   name: Master Bedroom
   entities:
     - light.master_bedroom_fan_light
+    - light.matt_nightstand_lamp
 
 - platform: group
   name: Master Bathroom
   entities:
-    - light.master_bathroom
+    - light.master_bathroom_mirror
+    - light.master_bathroom_toilet

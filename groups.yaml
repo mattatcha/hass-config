@@ -1,2 +1,8 @@
 Exterior Lights:
   - light.living_room_exterior
+
+Outdoor Front Lights:
+  - light.front_door_1
+  - light.front_door_2
+  - light.shop_front_1
+  - light.shop_front_2
