@@ -1,0 +1,31 @@
+group:
+  Front House Motion:
+    entities:
+      - binary_sensor.aarlo_motion_shop
+      - binary_sensor.aarlo_motion_driveway
+      - binary_sensor.aarlo_motion_front_door
+
+automation:
+  - alias: Front yard motion detected
+    trigger:
+      - platform: state
+        entity_id: group.front_house_motion
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+    action:
+      - data:
+          scene_id: front_yard_motion_revert
+          snapshot_entities: "light.front_yard"
+        service: scene.create
+      - service: light.turn_on
+        data:
+          brightness: 255
+          entity_id:
+            - light.front_yard
+      - delay: 00:05
+      - data:
+          entity_id: scene.front_yard_motion_revert
+        service: scene.turn_on
