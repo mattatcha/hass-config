@@ -14,20 +14,36 @@ input_number:
     step: 1
     mode: box
     unit_of_measurement: "°F"
+
 input_boolean:
   pool_winter_schedule:
     name: Pool Winter Schedule
 
+sensor:
+  - platform: history_stats
+    name: Daily Pool Pump Runtime
+    entity_id: switch.pool_pump_power
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+  - platform: template
+    sensors:
+      daily_pool_pump_power_consumption:
+        friendly_name: "Daily Pool Pump Power Comsumption"
+        unit_of_measurement: "kWh"
+        value_template: '{{ (states("sensor.daily_pool_pump_runtime")|float * 1.8 )| round(2) }}'
+
 automation:
   - alias: Pool Pump On
     trigger:
-      - at: "06:30:00"
+      - at: "05:00:00"
         platform: time
-      - at: "18:30:00"
+      - at: "20:00:00"
         platform: time
       - platform: template
         value_template: >-
-          {{ states('sensor.my_weather_station_temp') <= states('input_number.pool_freeze_protection_temp') }}
+          {{ states('sensor.my_weather_station_temp')|float <= states('input_number.pool_freeze_protection_temp')|float }}
         for:
           minutes: 1
     action:
@@ -36,14 +52,14 @@ automation:
 
   - alias: Pool Pump Off
     trigger:
-      - at: "11:30:00"
+      - at: "08:00:00"
         platform: time
-      - at: "22:30:00"
+      - at: "23:00:00"
         platform: time
     condition:
       - condition: template
         value_template: >-
-          {{ states('sensor.my_weather_station_temp') >= states('input_number.pool_freeze_protection_temp') }}
+          {{ states('sensor.my_weather_station_temp')|float >= states('input_number.pool_freeze_protection_temp')|float }}
     action:
       - service: switch.turn_off
         entity_id: switch.pool_pump_power

@@ -1,0 +1,40 @@
+ecobee:
+  api_key: !secret ecobee_api_key
+
+sensor:
+  - platform: template
+    sensors:
+      hallway_temperature:
+        unit_of_measurement: "°F"
+        value_template: "{{ state_attr('climate.living_room', 'current_temperature') }}"
+        device_class: temperature
+  - platform: min_max
+    type: mean
+    name: Average Whole Home
+    round_digits: 1
+    entity_ids:
+      # - sensor.living_room_temperature
+      - sensor.my_weather_station_inside_temp
+      - sensor.hallway_temperature
+      - sensor.bedroom_temperature
+      - sensor.master_bathroom_temp
+
+  - platform: template
+    sensors:
+      house_main_hvac_status:
+        value_template: "{{ state_attr('climate.living_room', 'hvac_action') }}"
+
+  - platform: history_stats
+    name: Daily HVAC Cooling Runtime
+    entity_id: sensor.house_main_hvac_status
+    state: "cooling"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: template
+    sensors:
+      daily_house_main_hvac_power_consumption:
+        friendly_name: "Daily HVAC Power Comsumption"
+        unit_of_measurement: "kWh"
+        value_template: '{{ (states("sensor.daily_hvac_cooling_runtime")|float * 5.52 )| round(2) }}'

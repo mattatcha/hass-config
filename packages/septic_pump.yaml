@@ -1,0 +1,38 @@
+# automation:
+#   - alias: House Away Mode
+#     trigger:
+#       - platform: state
+#         entity_id: input_boolean.guest_mode
+#         # to: not_home
+#     condition:
+#       - condition: state
+#         entity_id: input_boolean.guest_mode
+#         state: "on"
+#     #   - condition: state
+#     #     entity_id: group.family
+#     #     state: not_home
+#     #   - condition: state
+#     #     entity_id: input_boolean.guest_mode
+#     #     state: "off"
+#     action:
+#       - service_template: >
+#           {% if states.group.family.state == 'not_home' and states.input_boolean.guest_mode.state == 'off' and states.input_boolean.away_mode.state == 'off' %} input_boolean.turn_on
+#           {% elif states.group.family.state == 'home' or states.input_boolean.guest_mode.state == 'on' and states.input_boolean.away_mode.state == 'on' %} input_boolean.turn_off
+#           {% endif %}
+#         entity_id: input_boolean.away_mode
+
+binary_sensor:
+  - platform: template
+    sensors:
+      septic_pump_running:
+        value_template: >-
+          {{states('sensor.septic_pump_energy_current') | float > 1}}
+
+sensor:
+  - platform: history_stats
+    name: Daily Septic Pump Runtime
+    entity_id: binary_sensor.septic_pump_running
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
