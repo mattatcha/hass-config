@@ -1,0 +1,13 @@
+automation:
+  - alias: Follow Light
+    description: Syncs mirror light state to hue bulb
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: light.master_bathroom_mirror
+    action:
+      service: light.turn_on
+      entity_id: light.master_bathroom_toilet
+      data_template:
+        brightness: >
+          {{ state_attr('light.master_bathroom_mirror', 'brightness') | default(0, true) }}
